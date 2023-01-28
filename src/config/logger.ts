@@ -16,7 +16,7 @@ const logger = {
     level: 'error',
     format: format,
     transports: [
-      new _transports.File({ filename: './src/log/error.log' }),
+      new _transports.File({ filename: './log/error.log' }),
       new _transports.Console({ level: 'error' })
     ]
   }),
@@ -24,7 +24,7 @@ const logger = {
     level: 'warn',
     format: format,
     transports: [
-      new _transports.File({ filename: './src/log/warn.log' }),
+      new _transports.File({ filename: './log/warn.log' }),
       new _transports.Console({ level: 'warn' })
     ]
   }),
