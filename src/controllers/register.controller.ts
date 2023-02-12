@@ -5,8 +5,8 @@ import logger from '../config/logger'
 import { Request, Response } from 'express'
 
 const handleNewUser = async (req: Request, res: Response) => {
-  const { user, password } = req.body
-  if (!user || !password)
+  const { username, password, email } = req.body
+  if (!username || !password)
     return res.status(400).json({ error: 'Missing user or password' })
 
   try {
@@ -18,8 +18,9 @@ const handleNewUser = async (req: Request, res: Response) => {
 
     // create new user
     const newUser = new User({
-      username: user,
+      username: username,
       password: hashedPassword,
+      email: email,
       roles: [defaultRole?._id]
     })
 
@@ -32,4 +33,8 @@ const handleNewUser = async (req: Request, res: Response) => {
     logger.error.error(err)
     res.status(500).json({ error: err })
   }
+}
+
+export default {
+  handleNewUser
 }
