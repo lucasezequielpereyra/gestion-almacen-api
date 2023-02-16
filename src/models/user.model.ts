@@ -27,7 +27,9 @@ const userSchema = new Schema(
         type: Schema.Types.ObjectId
       }
     ],
-    refreshToken: [String]
+    refreshToken: {
+      type: [String]
+    }
   },
   {
     timestamps: true,
@@ -36,8 +38,10 @@ const userSchema = new Schema(
 )
 
 userSchema.pre('save', async function (next) {
-  this.password = await bcrypt.hash(this.password, 10)
-  next()
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10)
+    next()
+  }
 })
 
 const UserModel = model<IUser>('User', userSchema)

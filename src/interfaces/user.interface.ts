@@ -6,7 +6,7 @@ export interface IUser {
   password: string
   email: string
   roles: [ObjectId]
-  refreshToken: [string]
+  refreshToken: Array<String>
   createdAt: Date
   updatedAt: Date
 }
