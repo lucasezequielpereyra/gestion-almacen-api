@@ -10,16 +10,13 @@ const handleNewUser = async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Missing user or password' })
 
   try {
-    // encrypt password
-    const hashedPassword = await bcrypt.hash(password, 10)
-
     // find default user role
     const defaultRole = await Role.findOne({ name: 'user' }).exec()
 
     // create new user
     const newUser = new User({
       username: username,
-      password: hashedPassword,
+      password: password,
       email: email,
       roles: [defaultRole?._id]
     })
