@@ -80,7 +80,7 @@ const handleLogin = async (req: Request, res: Response) => {
     })
 
     // Send auth token
-    res.status(200).json({ accessToken })
+    res.status(200).json({ roles, accessToken })
   } catch (error) {
     logger.error.error(error)
     res.status(500).json({ message: 'Server Error' })
