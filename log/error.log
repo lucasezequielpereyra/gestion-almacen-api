@@ -1,1 +1,2 @@
 2023-02-12   14:45 [31merror[39m: 	User validation failed: email: Path `email` is required.
+2023-02-15   22:48 [31merror[39m: 	Cannot convert object to primitive value
