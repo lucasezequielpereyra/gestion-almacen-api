@@ -1,6 +1,7 @@
 import express, { Application, Request, Response, NextFunction } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import credentials from './middlewares/credentials'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { connect } from './config/mongo'
@@ -21,7 +22,9 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static('public'))
 app.use(morgan('dev'))
-app.use(cors())
+// CORS
+app.use(credentials)
+app.use(cors({ origin: true, credentials: true }))
 
 /*    ROUTES    */
 app.use('/auth/register', registerRouter)
