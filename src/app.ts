@@ -7,6 +7,7 @@ import { connect } from './config/mongo'
 import { createRoles } from './libs/initialSetup'
 import { router as registerRouter } from './routes/register.route'
 import { router as authRouter } from './routes/auth.route'
+import { router as refreshTokenRouter } from './routes/refreshToken.route'
 
 const app: Application = express()
 
@@ -25,6 +26,7 @@ app.use(cors())
 /*    ROUTES    */
 app.use('/auth/register', registerRouter)
 app.use('/auth/login', authRouter)
+app.use('/auth/refresh-token', refreshTokenRouter)
 
 /*    ERROR    */
 app.use((req: Request, res: Response, next: NextFunction) => {

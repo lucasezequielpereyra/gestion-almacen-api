@@ -17,7 +17,7 @@ const handleLogin = async (req: Request, res: Response) => {
   }
 
   try {
-    const foundUser = await User.findOne({ username }).exec()
+    const foundUser = await User.findOne({ username })
     if (!foundUser) return res.sendStatus(401) // 401: Unauthorized
 
     const isMatch = await bcrypt.compare(password, foundUser.password)
@@ -55,7 +55,7 @@ const handleLogin = async (req: Request, res: Response) => {
     if (cookies?.jwt) {
       logger.info.info(`refresh token from cookie: ${cookies.jwt}`)
       const refreshToken = cookies.jwt
-      const foundToken = await User.findOne({ refreshToken }).exec()
+      const foundToken = await User.findOne({ refreshToken })
 
       logger.info.info(`found token: ${foundToken}`)
 
