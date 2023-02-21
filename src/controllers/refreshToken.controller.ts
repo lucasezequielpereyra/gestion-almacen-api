@@ -86,7 +86,9 @@ const handleRefreshToken = async (req: Request, res: Response) => {
           maxAge: 24 * 60 * 60 * 1000
         })
 
-        res.json({ roles, accessToken })
+        const username = foundUser.username
+
+        res.json({ roles, accessToken, username })
       }
     )
   } catch (error) {

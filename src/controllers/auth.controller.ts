@@ -37,15 +37,11 @@ const handleLogin = async (req: Request, res: Response) => {
       { expiresIn: '10s' }
     )
 
-    logger.info.info(`access token: ${accessToken}`)
-
     const newRefreshToken = jwt.sign(
       { username: foundUser.username },
       JWT_REFRESH_SECRET,
       { expiresIn: '1d' }
     )
-
-    logger.info.info(`refresh token: ${newRefreshToken}`)
 
     // Changed to let keyword
     let newRefreshTokenArray = !cookies?.jwt
@@ -53,11 +49,8 @@ const handleLogin = async (req: Request, res: Response) => {
       : foundUser.refreshToken.filter(rt => rt !== cookies.jwt)
 
     if (cookies?.jwt) {
-      logger.info.info(`refresh token from cookie: ${cookies.jwt}`)
       const refreshToken = cookies.jwt
       const foundToken = await User.findOne({ refreshToken })
-
-      logger.info.info(`found token: ${foundToken}`)
 
       // Detected refresh token reuse
       if (foundToken === null) {
@@ -80,7 +73,7 @@ const handleLogin = async (req: Request, res: Response) => {
     })
 
     // Send auth token
-    res.status(200).json({ roles, accessToken })
+    res.status(200).json({ roles, accessToken, username })
   } catch (error) {
     logger.error.error(error)
     res.status(500).json({ message: 'Server Error' })
