@@ -29,7 +29,7 @@ app.use(cors({ origin: true, credentials: true }))
 /*    ROUTES    */
 app.use('/auth/register', registerRouter)
 app.use('/auth/login', authRouter)
-app.use('/auth/refresh-token', refreshTokenRouter)
+app.use('/auth/refresh', refreshTokenRouter)
 
 /*    ERROR    */
 app.use((req: Request, res: Response, next: NextFunction) => {
