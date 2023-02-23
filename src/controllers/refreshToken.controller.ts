@@ -88,7 +88,7 @@ const handleRefreshToken = async (req: Request, res: Response) => {
 
         const username = foundUser.username
 
-        res.json({ roles, accessToken, username })
+        res.json({ accessToken, username })
       }
     )
   } catch (error) {
