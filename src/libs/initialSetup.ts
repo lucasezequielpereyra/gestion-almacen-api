@@ -11,7 +11,10 @@ export const createRoles = async () => {
 
     const values: IRole[] = await Promise.all([
       new Role({ name: 'user' }).save(),
-      new Role({ name: 'admin' }).save()
+      new Role({ name: 'admin' }).save(),
+      new Role({ name: 'empleado' }).save(),
+      new Role({ name: 'encargado' }).save(),
+      new Role({ name: 'dueño' }).save()
     ])
 
     logger.info.info(values)
