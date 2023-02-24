@@ -44,7 +44,14 @@ const handleNewEmployee = async (req: Request, res: Response) => {
     const dataUser: IUser | null = await User.findOne({ username: user }).exec()
     if (!dataUser) return res.status(400).json({ error: 'User not found' })
 
-    const updateOrg = await Organization.findOneAndUpdate(dataOrg._id, {
+    const employeeInOrg = dataOrg.employees.filter(
+      employee => employee.toString() === dataUser._id.toString()
+    )
+
+    if (employeeInOrg?.length > 0)
+      return res.status(400).json({ error: 'User already in org' })
+
+    await Organization.findOneAndUpdate(dataOrg._id, {
       $push: { employees: dataUser._id }
     })
 
