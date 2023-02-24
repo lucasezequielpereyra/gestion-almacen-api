@@ -1,6 +1,5 @@
 import User from '../models/user.model'
 import Role from '../models/role.model'
-import bcrypt from 'bcryptjs'
 import logger from '../config/logger'
 import { Request, Response } from 'express'
 

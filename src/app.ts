@@ -9,6 +9,7 @@ import { createRoles } from './libs/initialSetup'
 import { router as registerRouter } from './routes/register.route'
 import { router as authRouter } from './routes/auth.route'
 import { router as refreshTokenRouter } from './routes/refreshToken.route'
+import { router as organizationRouter } from './routes/admin/organization.route'
 
 const app: Application = express()
 
@@ -30,6 +31,7 @@ app.use(cors({ origin: true, credentials: true }))
 app.use('/auth/register', registerRouter)
 app.use('/auth/login', authRouter)
 app.use('/auth/refresh', refreshTokenRouter)
+app.use('/admin/organization', organizationRouter)
 
 /*    ERROR    */
 app.use((req: Request, res: Response, next: NextFunction) => {
