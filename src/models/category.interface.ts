@@ -5,6 +5,11 @@ const categorySchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    organization: {
+        ref: 'Organization',
+        type: Schema.Types.ObjectId,
+        required: true
     }
 })
 

@@ -33,7 +33,8 @@ const productSchema = new Schema({
     },
     organization: {
         ref: 'Organization',
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        required: true
     }
 })
 
