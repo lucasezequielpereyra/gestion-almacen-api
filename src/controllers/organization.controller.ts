@@ -4,6 +4,8 @@ import Organization from '../models/organization.model'
 import User from '../models/user.model'
 import logger from '../config/logger'
 import { Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
+
 
 const handleNewOrganization = async (req: Request, res: Response) => {
   const { name } = req.body
@@ -62,7 +64,26 @@ const handleNewEmployee = async (req: Request, res: Response) => {
   }
 }
 
+const getOrganizationByEmployee = async (req: Request, res: Response) => {
+  const { username } = req.body
+
+  try {
+    const dataUser: IUser | null = await User.findOne({ username: username }).exec()
+    if (!dataUser) return res.status(400).json({ error: 'User not found' })
+
+    const dataOrg: IOrganization | null = await Organization.findOne({ employees: dataUser._id }).exec()
+    if (!dataOrg) return res.status(400).json({ error: 'Organization not found' })
+
+    return res.status(200).json({ organization: dataOrg.name })
+  } catch (error) {
+    logger.error.error(error)
+    res.sendStatus(500)
+  }
+
+}
+
 export default {
   handleNewOrganization,
-  handleNewEmployee
+  handleNewEmployee,
+  getOrganizationByEmployee
 }
