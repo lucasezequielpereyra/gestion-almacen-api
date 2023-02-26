@@ -51,3 +51,53 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
         res.sendStatus(403)
     }
 }
+
+export const verifyEncargado = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader: String | undefined = req.header('Authorization') || req.header('Authorization')
+    if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
+
+    const token = authHeader.split(' ')[1]
+
+    try {
+        jwt.verify(
+            token,
+            JWT_SECRET,
+            async (err: any, decoded: any) => {
+                if (err) return res.sendStatus(403)
+                const roles: IRole[] = decoded.UserInfo.roles
+                const encargadoRole = await Role.findOne({ name: 'encargado' }).exec()
+                if (!encargadoRole) return res.sendStatus(403)
+                const isEncargado = roles.some(role => role.toString() === encargadoRole._id.toString())
+                if (!isEncargado) return res.sendStatus(403)
+                next()
+            }
+        )
+    } catch (error) {
+        res.sendStatus(403)
+    }
+}
+
+export const verifyDueño = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader: String | undefined = req.header('Authorization') || req.header('Authorization')
+    if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
+
+    const token = authHeader.split(' ')[1]
+
+    try {
+        jwt.verify(
+            token,
+            JWT_SECRET,
+            async (err: any, decoded: any) => {
+                if (err) return res.sendStatus(403)
+                const roles: IRole[] = decoded.UserInfo.roles
+                const dueñoRole = await Role.findOne({ name: 'dueño' }).exec()
+                if (!dueñoRole) return res.sendStatus(403)
+                const isDueño = roles.some(role => role.toString() === dueñoRole._id.toString())
+                if (!isDueño) return res.sendStatus(403)
+                next()
+            }
+        )
+    } catch (error) {
+        res.sendStatus(403)
+    }
+}

@@ -4,7 +4,6 @@ import Organization from '../models/organization.model'
 import User from '../models/user.model'
 import logger from '../config/logger'
 import { Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
 
 
 const handleNewOrganization = async (req: Request, res: Response) => {
