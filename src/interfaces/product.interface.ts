@@ -10,4 +10,5 @@ export interface IProduct {
     price_cost: number
     price_sale: number
     stock: number
+    organization: ObjectId
 }

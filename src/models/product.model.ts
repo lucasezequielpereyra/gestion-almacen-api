@@ -30,6 +30,10 @@ const productSchema = new Schema({
     },
     stock: {
         type: Number,
+    },
+    organization: {
+        ref: 'Organization',
+        type: Schema.Types.ObjectId
     }
 })
 
