@@ -4,6 +4,7 @@ import Organization from '../models/organization.model'
 import { Request, Response } from 'express'
 import logger from '../config/logger'
 import { IUser } from '../interfaces/user.interface'
+import bcrypt from 'bcryptjs'
 
 const handleNewEmployee = async (req: Request, res: Response) => {
     const { employeeUser, password, email, employeeRoles, organization } = req.body
@@ -47,9 +48,11 @@ const handleUpdateEmployee = async (req: Request, res: Response) => {
 
         const foundOrganization = await Organization.find({ name: organization })
 
+        const passwordHash = await bcrypt.hash(password, 10)
+
         const updateEmployee = await User.findOneAndUpdate({ _id: foundEmployee._id }, {
             username: employeeUser || foundEmployee.username,
-            password: password || foundEmployee.password,
+            password: passwordHash || foundEmployee.password,
             email: email || foundEmployee.email,
             roles: foundRoles.map(role => role._id) || foundEmployee.roles,
             organization: foundOrganization.map(organization => organization._id) || foundEmployee.organization

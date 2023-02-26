@@ -56,11 +56,15 @@ const handleRefreshToken = async (req: Request, res: Response) => {
         // Refresh token was still valid
         const roles = Object.values(foundUser.roles)
 
+        // capture organization for response
+        const organization = foundUser.organization || null
+
         const accessToken = jwt.sign(
           {
             UserInfo: {
               username: foundUser.username,
-              roles: roles
+              roles: roles,
+              organization: organization
             }
           },
           JWT_TOKEN_SECRET,
@@ -88,7 +92,7 @@ const handleRefreshToken = async (req: Request, res: Response) => {
 
         const username = foundUser.username
 
-        res.json({ accessToken, username })
+        res.json({ accessToken, username, roles, organization })
       }
     )
   } catch (error) {

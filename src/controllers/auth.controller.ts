@@ -25,12 +25,16 @@ const handleLogin = async (req: Request, res: Response) => {
 
     const roles = Object.values(foundUser.roles).filter(Boolean)
 
+    // capture organization for response
+    const organization = foundUser.organization || null
+
     // Create JWT Payload
     const accessToken = jwt.sign(
       {
         UserInfo: {
           username: foundUser.username,
-          roles: roles
+          roles: roles,
+          organization: organization
         }
       },
       JWT_SECRET,
@@ -73,7 +77,7 @@ const handleLogin = async (req: Request, res: Response) => {
     })
 
     // Send auth token
-    res.status(200).json({ accessToken, username })
+    res.status(200).json({ accessToken, username, roles, organization })
   } catch (error) {
     logger.error.error(error)
     res.status(500).json({ message: 'Server Error' })
