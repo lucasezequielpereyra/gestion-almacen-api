@@ -65,10 +65,11 @@ export const verifyEncargado = (req: Request, res: Response, next: NextFunction)
             async (err: any, decoded: any) => {
                 if (err) return res.sendStatus(403)
                 const roles: IRole[] = decoded.UserInfo.roles
-                const encargadoRole = await Role.findOne({ name: 'encargado' }).exec()
+                const encargadoRole = await Role.findOne({ name: 'encargado' })
                 if (!encargadoRole) return res.sendStatus(403)
                 const isEncargado = roles.some(role => role.toString() === encargadoRole._id.toString())
                 if (!isEncargado) return res.sendStatus(403)
+                req.body.organization = decoded.UserInfo.organization
                 next()
             }
         )

@@ -6,14 +6,14 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { connect } from './config/mongo'
 import { createRoles } from './libs/initialSetup'
-import { vierifyJwt } from './middlewares/verifyJwt'
-import { verifyAdmin } from './middlewares/verifyJwt'
+import { vierifyJwt, verifyAdmin, verifyEncargado } from './middlewares/verifyJwt'
 import { router as registerRouter } from './routes/register.route'
 import { router as authRouter } from './routes/auth.route'
 import { router as refreshTokenRouter } from './routes/refreshToken.route'
 import { router as organizationRouter } from './routes/admin/organization.route'
 import { router as organizationApiRouter } from './routes/api/organization.route'
 import { router as employeeRouter } from './routes/admin/employee.route'
+import { router as categoryRouter } from './routes/api/category.route'
 
 const app: Application = express()
 
@@ -38,6 +38,9 @@ app.use('/auth/refresh', refreshTokenRouter)
 
 app.use(vierifyJwt) // JWT verification in next routes
 app.use('/api/organization', organizationApiRouter)
+
+app.use(verifyEncargado) // Encargado verification in next routes
+app.use('/api/category', categoryRouter)
 
 app.use(verifyAdmin) // Admin verification in next routes
 app.use('/admin/organization', organizationRouter)

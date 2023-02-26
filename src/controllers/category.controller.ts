@@ -1,5 +1,4 @@
 import Category from '../models/category.model'
-import { ICategory } from '../interfaces/category.interface'
 import { Request, Response } from 'express'
 
 const handleNewCategory = async (req: Request, res: Response) => {
@@ -9,7 +8,7 @@ const handleNewCategory = async (req: Request, res: Response) => {
 
     try {
         const newCategory = new Category({
-            organization: organization._id,
+            organization: organization,
             name: name
         })
 
