@@ -34,7 +34,7 @@ const handleLogin = async (req: Request, res: Response) => {
         }
       },
       JWT_SECRET,
-      { expiresIn: '10s' }
+      { expiresIn: '15m' }
     )
 
     const newRefreshToken = jwt.sign(

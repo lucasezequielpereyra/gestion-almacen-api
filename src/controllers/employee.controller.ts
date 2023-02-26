@@ -63,7 +63,34 @@ const handleUpdateEmployee = async (req: Request, res: Response) => {
     }
 }
 
+const handleGetEmployees = async (req: Request, res: Response) => {
+    try {
+        const getRoles = await Role.find({
+            name: {
+                $in: ['dueño', 'empleado', 'encargado']
+            }
+        })
+
+        if (getRoles) {
+            const employees = await User.find({
+                roles: {
+                    $in: getRoles.map(role => role._id)
+                }
+            }).populate('roles').populate('organization')
+
+            res.status(200).json({ message: 'Employees found', employees })
+        } else {
+            res.status(404).json({ message: 'Employee role not found' })
+        }
+
+    } catch (error) {
+        logger.error.error(error)
+        return res.status(500).json({ message: 'Internal server error', error })
+    }
+}
+
 export default {
     handleNewEmployee,
-    handleUpdateEmployee
+    handleUpdateEmployee,
+    handleGetEmployees
 }
