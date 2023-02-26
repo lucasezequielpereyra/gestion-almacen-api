@@ -29,6 +29,10 @@ const userSchema = new Schema(
     ],
     refreshToken: {
       type: [String]
+    },
+    organization: {
+      ref: 'Organization',
+      type: Schema.Types.ObjectId
     }
   },
   {
