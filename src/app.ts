@@ -13,6 +13,7 @@ import { router as authRouter } from './routes/auth.route'
 import { router as refreshTokenRouter } from './routes/refreshToken.route'
 import { router as organizationRouter } from './routes/admin/organization.route'
 import { router as organizationApiRouter } from './routes/api/organization.route'
+import { router as employeeRouter } from './routes/admin/employee.route'
 
 const app: Application = express()
 
@@ -40,6 +41,7 @@ app.use('/api/organization', organizationApiRouter)
 
 app.use(verifyAdmin) // Admin verification in next routes
 app.use('/admin/organization', organizationRouter)
+app.use('/admin/employee', employeeRouter)
 
 
 /*    ERROR    */
