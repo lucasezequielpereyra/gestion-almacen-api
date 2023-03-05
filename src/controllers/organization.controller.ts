@@ -92,9 +92,23 @@ const getOrganizations = async (req: Request, res: Response) => {
   }
 }
 
+const handleDeleteOrganization = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  try {
+    const deletedOrganization = await Organization.findByIdAndDelete(id)
+    if (!deletedOrganization) return res.status(404).json({ message: 'Organization not found' })
+
+    return res.status(200).json({ message: 'Organization deleted', organization: deletedOrganization })
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error })
+  }
+}
+
 export default {
   handleNewOrganization,
   handleNewEmployee,
   getOrganizationByEmployee,
-  getOrganizations
+  getOrganizations,
+  handleDeleteOrganization
 }
