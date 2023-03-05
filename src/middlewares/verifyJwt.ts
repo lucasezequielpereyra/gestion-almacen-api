@@ -28,7 +28,7 @@ export const vierifyJwt = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader: String | undefined = req.header('Authorization') || req.header('Authorization')
+    const authHeader: String | undefined = req.header('Authorization') || req.header('authorization')
     if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
 
     const token = authHeader.split(' ')[1]
