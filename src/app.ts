@@ -27,7 +27,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static('public'))
 app.use(morgan('dev'))
-// CORS
+
+/*   CORS    */
 app.use(credentials)
 app.use(cors({ origin: true, credentials: true }))
 

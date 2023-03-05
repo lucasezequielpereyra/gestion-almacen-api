@@ -6,7 +6,7 @@ import { IRole } from '../interfaces/role.interface'
 const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET || 'secret'
 
 export const vierifyJwt = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader: String | undefined = req.header('Authorization') || req.header('Authorization')
+    const authHeader: String | undefined = req.header('Authorization') || req.header('authorization')
     if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
 
     const token = authHeader.split(' ')[1]
@@ -53,7 +53,7 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
 }
 
 export const verifyEncargado = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader: String | undefined = req.header('Authorization') || req.header('Authorization')
+    const authHeader: String | undefined = req.header('Authorization') || req.header('authorization')
     if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
 
     const token = authHeader.split(' ')[1]
@@ -79,7 +79,7 @@ export const verifyEncargado = (req: Request, res: Response, next: NextFunction)
 }
 
 export const verifyDueño = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader: String | undefined = req.header('Authorization') || req.header('Authorization')
+    const authHeader: String | undefined = req.header('Authorization') || req.header('authorization')
     if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
 
     const token = authHeader.split(' ')[1]
