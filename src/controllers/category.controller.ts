@@ -21,7 +21,7 @@ const handleNewCategory = async (req: Request, res: Response) => {
 }
 
 const getCategoriesByOrganization = async (req: Request, res: Response) => {
-    const { organization } = req.params
+    const { organization } = req.body
 
     if (!organization) return res.status(400).json({ message: 'Missing parameters' })
 
