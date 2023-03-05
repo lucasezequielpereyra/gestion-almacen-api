@@ -52,6 +52,32 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
+export const verifyEmpleado = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader: String | undefined = req.header('Authorization') || req.header('authorization')
+    if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
+
+    const token = authHeader.split(' ')[1]
+
+    try {
+        jwt.verify(
+            token,
+            JWT_SECRET,
+            async (err: any, decoded: any) => {
+                if (err) return res.sendStatus(403)
+                const roles: IRole[] = decoded.UserInfo.roles
+                const empleadoRole = await Role.findOne({ name: 'empleado' })
+                if (!empleadoRole) return res.sendStatus(403)
+                const isEmpleado = roles.some(role => role.toString() === empleadoRole._id.toString())
+                if (!isEmpleado) return res.sendStatus(403)
+                req.body.organization = decoded.UserInfo.organization
+                next()
+            }
+        )
+    } catch (error) {
+        res.sendStatus(403)
+    }
+}
+
 export const verifyEncargado = (req: Request, res: Response, next: NextFunction) => {
     const authHeader: String | undefined = req.header('Authorization') || req.header('authorization')
     if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
