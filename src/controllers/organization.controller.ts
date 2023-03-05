@@ -81,8 +81,20 @@ const getOrganizationByEmployee = async (req: Request, res: Response) => {
 
 }
 
+const getOrganizations = async (req: Request, res: Response) => {
+  try {
+    const foundOrganizations = await Organization.find()
+    if (!foundOrganizations) return res.status(404).json({ message: 'Organizations not found' })
+
+    return res.status(200).json({ message: 'Organizations found', organizations: foundOrganizations })
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error', error })
+  }
+}
+
 export default {
   handleNewOrganization,
   handleNewEmployee,
-  getOrganizationByEmployee
+  getOrganizationByEmployee,
+  getOrganizations
 }

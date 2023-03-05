@@ -35,4 +35,21 @@ const getCategoriesByOrganization = async (req: Request, res: Response) => {
     }
 }
 
-export default { handleNewCategory, getCategoriesByOrganization }
+const handleDeleteCategory = async (req: Request, res: Response) => {
+    const { id } = req.params
+    const { organization } = req.body
+
+    if (!id) return res.status(400).json({ message: 'Missing parameters' })
+
+    try {
+        const deletedCategory = await Category.findByIdAndDelete(id)
+        if (!deletedCategory) return res.status(404).json({ message: 'Category not found' })
+        if (deletedCategory.organization != organization) return res.sendStatus(403)
+
+        return res.status(200).json({ message: 'Category deleted', category: deletedCategory })
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error', error })
+    }
+}
+
+export default { handleNewCategory, getCategoriesByOrganization, handleDeleteCategory }

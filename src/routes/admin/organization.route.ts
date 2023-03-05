@@ -9,5 +9,5 @@ router.post(
   [checkDuplicateOrganizationName],
   organizationController.handleNewOrganization
 )
-
 router.put('/', organizationController.handleNewEmployee)
+router.get('/', organizationController.getOrganizations)
