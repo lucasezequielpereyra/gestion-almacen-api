@@ -6,7 +6,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { connect } from './config/mongo'
 import { createRoles } from './libs/initialSetup'
-import { vierifyJwt, verifyAdmin, verifyEncargado } from './middlewares/verifyJwt'
+import { vierifyJwt, verifyAdmin } from './middlewares/verifyJwt'
 import { router as registerRouter } from './routes/register.route'
 import { router as authRouter } from './routes/auth.route'
 import { router as refreshTokenRouter } from './routes/refreshToken.route'
@@ -37,13 +37,14 @@ app.use('/auth/register', registerRouter)
 app.use('/auth/login', authRouter)
 app.use('/auth/refresh', refreshTokenRouter)
 
-app.use(vierifyJwt) // JWT verification in next routes
-app.use('/api/organization', organizationApiRouter)
+/*    Organization API    */
+app.use('/api/organization', [vierifyJwt], organizationApiRouter)
 
-app.use(verifyEncargado) // Encargado verification in next routes
-app.use('/api/category', categoryRouter)
+/*    Organization Category API    */
+app.use('/api/category', [vierifyJwt], categoryRouter)
 
-app.use(verifyAdmin) // Admin verification in next routes
+/*    Admin    */
+app.use(verifyAdmin)
 app.use('/admin/organization', organizationRouter)
 app.use('/admin/employee', employeeRouter)
 
