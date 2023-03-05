@@ -14,6 +14,7 @@ import { router as organizationRouter } from './routes/admin/organization.route'
 import { router as organizationApiRouter } from './routes/api/organization.route'
 import { router as employeeRouter } from './routes/admin/employee.route'
 import { router as categoryRouter } from './routes/api/category.route'
+import { router as productRouter } from './routes/api/product.route'
 
 const app: Application = express()
 
@@ -42,6 +43,9 @@ app.use('/api/organization', [vierifyJwt], organizationApiRouter)
 
 /*    Organization Category API    */
 app.use('/api/category', [vierifyJwt], categoryRouter)
+
+/*    Organization Product API    */
+app.use('/api/product', [vierifyJwt], productRouter)
 
 /*    Admin    */
 app.use(verifyAdmin)

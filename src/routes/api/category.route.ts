@@ -5,5 +5,5 @@ import { verifyEncargado, verifyDueño } from '../../middlewares/verifyJwt';
 export const router = Router();
 
 router.post('/', [verifyEncargado], categoryController.handleNewCategory);
-router.get('/', categoryController.getCategoriesByOrganization);
+router.get('/', [verifyEncargado], categoryController.getCategoriesByOrganization);
 router.delete('/:id', [verifyDueño], categoryController.handleDeleteCategory);
