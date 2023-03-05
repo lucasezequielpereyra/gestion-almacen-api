@@ -11,3 +11,4 @@ router.post(
 )
 router.put('/', organizationController.handleNewEmployee)
 router.get('/', organizationController.getOrganizations)
+router.delete('/:id', organizationController.handleDeleteOrganization)
