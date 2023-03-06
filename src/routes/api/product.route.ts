@@ -7,3 +7,4 @@ export const router = Router();
 router.post('/', [verifyEncargado], producController.handleNewProduct);
 router.get('/', [verifyEmpleado], producController.getProductsByOrganization);
 router.put('/:id', [verifyEncargado], producController.handleUpdateProduct);
+router.delete('/:id', [verifyEncargado], producController.handleDeleteProduct);

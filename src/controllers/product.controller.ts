@@ -87,9 +87,24 @@ const handleUpdateProduct = async (req: Request, res: Response) => {
     }
 }
 
+const handleDeleteProduct = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        const deleteProduct = await Product.findByIdAndDelete(id);
+        if (!deleteProduct) return res.status(404).json({ error: 'Product not found' });
+
+        return res.status(200).json(`Product ${deleteProduct.name} deleted`);
+    } catch (error) {
+        logger.error.error(error);
+        res.status(500).json({ error: error });
+    }
+}
+
 
 export default {
     handleNewProduct,
     getProductsByOrganization,
-    handleUpdateProduct
+    handleUpdateProduct,
+    handleDeleteProduct
 }
