@@ -57,8 +57,39 @@ const getProductsByOrganization = async (req: Request, res: Response) => {
     }
 }
 
+const handleUpdateProduct = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { sku, name, category, description, EAN, price_cost, price_sale, stock, organization } = req.body;
+
+    try {
+        const foundProduct = await Product.findById(id);
+        if (!foundProduct) return res.status(404).json({ error: 'Product not found' });
+
+        const foundCategory = await Category.findOne({ name: category });
+        if (!foundCategory) return res.status(400).json({ error: 'Category not found' });
+
+        const updateProduct = await Product.findOneAndUpdate({ _id: foundProduct._id }, {
+            sku: sku || foundProduct.sku,
+            name: name || foundProduct.name,
+            category: foundCategory || foundProduct.category,
+            description: description || foundProduct.description,
+            EAN: EAN || foundProduct.EAN,
+            price_cost: price_cost || foundProduct.price_cost,
+            price_sale: price_sale || foundProduct.price_sale,
+            stock: stock || foundProduct.stock,
+            organization: organization
+        }, { new: true });
+
+        return res.status(200).json(updateProduct);
+    } catch (error) {
+        logger.error.error(error);
+        res.status(500).json({ error: error });
+    }
+}
+
 
 export default {
     handleNewProduct,
-    getProductsByOrganization
+    getProductsByOrganization,
+    handleUpdateProduct
 }
