@@ -1,5 +1,6 @@
 import Product from '../models/product.model';
 import Category from '../models/category.model';
+import Organization from '../models/organization.model';
 import logger from '../config/logger';
 import { Request, Response } from 'express';
 
@@ -38,6 +39,26 @@ const handleNewProduct = async (req: Request, res: Response) => {
     }
 }
 
+const getProductsByOrganization = async (req: Request, res: Response) => {
+    const { organization } = req.body;
+    if (!organization) return res.status(400).json({ error: 'Missing organization' });
+
+    try {
+        const foundOrganization = await Organization.findOne({ _id: organization });
+        if (!foundOrganization) return res.status(400).json({ error: 'Organization not found' });
+
+        const foundProducts = await Product.find({ organization: foundOrganization });
+        if (!foundProducts) return res.status(400).json({ error: 'Products not found' });
+
+        return res.status(200).json(foundProducts);
+    } catch (error) {
+        logger.error.error(error);
+        res.status(500).json({ error: error });
+    }
+}
+
+
 export default {
-    handleNewProduct
+    handleNewProduct,
+    getProductsByOrganization
 }
