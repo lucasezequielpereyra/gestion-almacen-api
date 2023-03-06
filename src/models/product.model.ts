@@ -4,7 +4,8 @@ import { IProduct } from '../interfaces/product.interface'
 const productSchema = new Schema({
     sku: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     name: {
         type: String,
@@ -20,6 +21,7 @@ const productSchema = new Schema({
     },
     EAN: {
         type: String,
+        unique: true
     },
     price_cost: {
         type: Number,
