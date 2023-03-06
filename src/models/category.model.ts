@@ -4,7 +4,8 @@ import { ICategory } from '../interfaces/category.interface'
 const categorySchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     organization: {
         ref: 'Organization',

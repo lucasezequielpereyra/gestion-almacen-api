@@ -6,14 +6,10 @@ export const checkDuplicateProducts = async (req: Request, res: Response, next: 
     const { sku, EAN } = req.body;
 
     const searchBySku = await Product.find({ sku: sku }).exec();
-    if (searchBySku.length > 0) {
-        return res.sendStatus(400)
-    }
+    if (searchBySku.length > 0) return res.sendStatus(400)
 
     const searchByEAN = await Product.find({ EAN: EAN }).exec();
-    if (searchByEAN.length > 0) {
-        return res.sendStatus(400)
-    }
+    if (searchByEAN.length > 0) return res.sendStatus(400)
 
     next();
 }
