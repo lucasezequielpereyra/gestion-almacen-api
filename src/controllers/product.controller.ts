@@ -12,8 +12,8 @@ const handleNewProduct = async (req: Request, res: Response) => {
     description,
     EAN,
     price_cost,
-    price_sale,
-    stock,
+    price_sale = '0',
+    stock = '0',
     organization
   } = req.body
 
@@ -31,6 +31,7 @@ const handleNewProduct = async (req: Request, res: Response) => {
     const foundCategory = await Category.findOne({ name: category })
     if (!foundCategory)
       return res.status(400).json({ error: 'Category not found' })
+
     const newProduct = new Product({
       sku: sku,
       name: name,
@@ -64,7 +65,7 @@ const getProductsByOrganization = async (req: Request, res: Response) => {
 
     const foundProducts = await Product.find({
       organization: foundOrganization
-    })
+    }).populate('category')
     if (!foundProducts)
       return res.status(400).json({ error: 'Products not found' })
 
