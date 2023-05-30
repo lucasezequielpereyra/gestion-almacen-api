@@ -65,7 +65,9 @@ const getProductsByOrganization = async (req: Request, res: Response) => {
 
     const foundProducts = await Product.find({
       organization: foundOrganization
-    }).populate('category')
+    })
+      .populate('category')
+      .sort({ sku: 1 })
     if (!foundProducts)
       return res.status(400).json({ error: 'Products not found' })
 
