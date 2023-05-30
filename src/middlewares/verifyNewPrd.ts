@@ -7,14 +7,15 @@ export const checkDuplicateProducts = async (
   next: NextFunction
 ) => {
   const { sku, EAN } = req.body
+  const { id } = req.params
 
   const searchBySku = await Product.find({ sku: sku }).exec()
-  if (searchBySku.length > 0)
-    return res.status(400).json({ error: 'Este sku ya existe' })
 
-  const searchByEAN = await Product.find({ EAN: EAN }).exec()
-  if (searchByEAN.length > 0)
-    return res.status(400).json({ error: 'Este EAN ya existe' })
+  if (searchBySku.length > 0) {
+    if (id !== searchBySku[0]._id.toString()) {
+      return res.status(400).json({ error: 'Este SKU ya existe' })
+    }
+  }
 
   next()
 }

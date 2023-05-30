@@ -77,7 +77,6 @@ const getProductsByOrganization = async (req: Request, res: Response) => {
 }
 
 const handleUpdateProduct = async (req: Request, res: Response) => {
-  const { id } = req.params
   const {
     sku,
     name,
@@ -91,7 +90,7 @@ const handleUpdateProduct = async (req: Request, res: Response) => {
   } = req.body
 
   try {
-    const foundProduct = await Product.findById(id)
+    const foundProduct = await Product.findOne({ sku: sku })
     if (!foundProduct)
       return res.status(404).json({ error: 'Product not found' })
 
