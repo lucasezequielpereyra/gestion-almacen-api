@@ -6,7 +6,7 @@ export const checkDuplicateProducts = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { sku, EAN } = req.body
+  const { sku } = req.body
   const { id } = req.params
 
   const searchBySku = await Product.find({ sku: sku }).exec()
