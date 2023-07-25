@@ -46,7 +46,9 @@ const handleNewProduct = async (req: Request, res: Response) => {
 
     const savedProduct = await newProduct.save()
 
-    return res.status(201).json(`Product ${savedProduct.name} created`)
+    return res
+      .status(201)
+      .json({ message: `Product ${savedProduct.name} created`, savedProduct })
   } catch (err) {
     logger.error.error(err)
     res.status(500).json({ error: err })
