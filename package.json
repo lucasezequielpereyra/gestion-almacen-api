@@ -16,16 +16,16 @@
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.2.1",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.4.1",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.9.2",
+    "nodemailer": "^6.9.4",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "winston": "^3.8.2"
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -38,13 +38,13 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.4",
-    "@types/node": "^20.2.3",
-    "@types/nodemailer": "^6.4.8",
+    "@types/node": "^20.4.5",
+    "@types/nodemailer": "^6.4.9",
     "@types/passport": "^1.0.12",
     "@types/passport-local": "^1.0.35",
     "@types/winston": "^2.4.4",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   }
 }
