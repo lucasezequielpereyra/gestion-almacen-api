@@ -4,4 +4,5 @@ export interface ICategory {
     _id: string
     name: string
     organization: ObjectId
+    deleted: boolean
 }

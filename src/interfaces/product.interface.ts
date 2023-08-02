@@ -11,4 +11,5 @@ export interface IProduct {
     price_sale: number
     stock: number
     organization: ObjectId
+    deleted: boolean
 }

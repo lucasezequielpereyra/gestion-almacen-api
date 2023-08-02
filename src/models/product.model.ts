@@ -37,6 +37,10 @@ const productSchema = new Schema({
         ref: 'Organization',
         type: Schema.Types.ObjectId,
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 })
 
