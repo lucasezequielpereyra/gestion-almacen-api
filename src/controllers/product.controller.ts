@@ -142,7 +142,7 @@ const handleDeleteProduct = async (req: Request, res: Response) => {
 }
 
 const handleLogicalDeleteProduct = async (req: Request, res: Response) => {
-  const {id} = req.params
+  const { id } = req.params
 
   try {
     const foundProduct = await Product.findOne({ _id: id })
@@ -153,8 +153,10 @@ const handleLogicalDeleteProduct = async (req: Request, res: Response) => {
 
     const logicalDeleteProduct = await foundProduct.save()
 
-    return res.status(200).json(`El producto ${logicalDeleteProduct.name} fue eliminado`)
-    
+    return res.status(200).json({
+      message: `El producto ${logicalDeleteProduct.name} fue eliminado`,
+      foundProduct
+    })
   } catch (error) {
     return res.status(500).json({ error: error })
   }
