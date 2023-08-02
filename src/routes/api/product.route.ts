@@ -16,4 +16,4 @@ router.put(
   [verifyEncargado, checkDuplicateProducts],
   producController.handleUpdateProduct
 )
-router.delete('/:id', [verifyEncargado], producController.handleDeleteProduct)
+router.delete('/:id', [verifyEncargado], producController.handleLogicalDeleteProduct)
