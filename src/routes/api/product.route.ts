@@ -11,9 +11,18 @@ router.post(
   producController.handleNewProduct
 )
 router.get('/', [verifyEmpleado], producController.getProductsByOrganization)
+router.get(
+  '/deletes',
+  [verifyEmpleado],
+  producController.getDeletesProductsByOrganization
+)
 router.put(
   '/:id',
   [verifyEncargado, checkDuplicateProducts],
   producController.handleUpdateProduct
 )
-router.delete('/:id', [verifyEncargado], producController.handleLogicalDeleteProduct)
+router.delete(
+  '/:id',
+  [verifyEncargado],
+  producController.handleLogicalDeleteProduct
+)

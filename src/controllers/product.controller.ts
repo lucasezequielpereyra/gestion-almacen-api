@@ -81,6 +81,37 @@ const getProductsByOrganization = async (req: Request, res: Response) => {
   }
 }
 
+const getDeletesProductsByOrganization = async (
+  req: Request,
+  res: Response
+) => {
+  const { organization } = req.body
+
+  if (!organization)
+    return res.status(400).json({ error: 'Missing organization' })
+
+  try {
+    const foundOrganization = await Organization.findOne({ _id: organization })
+    if (!foundOrganization)
+      return res.status(400).json({ error: 'Organization not found' })
+
+    const foundProducts = await Product.find({
+      organization: foundOrganization,
+      deleted: true
+    })
+      .populate('category')
+      .sort({ sku: 1 })
+
+    if (!foundProducts)
+      return res.status(400).json({ error: 'Products not found' })
+
+    return res.status(200).json({ foundProducts })
+  } catch (error) {
+    logger.error.error(error)
+    res.status(500).json({ error: error })
+  }
+}
+
 const handleUpdateProduct = async (req: Request, res: Response) => {
   const {
     sku,
@@ -167,5 +198,6 @@ export default {
   getProductsByOrganization,
   handleUpdateProduct,
   handleDeleteProduct,
-  handleLogicalDeleteProduct
+  handleLogicalDeleteProduct,
+  getDeletesProductsByOrganization
 }
