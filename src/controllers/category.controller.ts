@@ -5,7 +5,7 @@ const handleNewCategory = async (req: Request, res: Response) => {
   const { organization, name } = req.body
 
   if (!organization || !name)
-    return res.status(400).json({ message: 'Missing parameters' })
+    return res.status(400).json({ error: 'Faltan parametros' })
 
   try {
     const newCategory = new Category({
