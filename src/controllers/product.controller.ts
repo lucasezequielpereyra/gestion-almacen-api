@@ -126,11 +126,13 @@ const handleUpdateProduct = async (req: Request, res: Response) => {
   } = req.body
 
   try {
-    const foundProduct = await Product.findOne({ sku: sku })
+    const foundProduct = await Product.findOne({ sku: sku }).populate(
+      'category'
+    )
     if (!foundProduct)
       return res.status(404).json({ error: 'Product not found' })
 
-    const foundCategory = await Category.findOne({ name: category })
+    const foundCategory = await Category.findOne({ name: category.name })
     if (!foundCategory)
       return res.status(400).json({ error: 'Category not found' })
 
@@ -148,7 +150,7 @@ const handleUpdateProduct = async (req: Request, res: Response) => {
         organization: organization
       },
       { new: true }
-    )
+    ).populate('category')
 
     return res.status(200).json(updateProduct)
   } catch (error) {
@@ -176,7 +178,7 @@ const handleLogicalDeleteProduct = async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const foundProduct = await Product.findOne({ _id: id })
+    const foundProduct = await Product.findOne({ _id: id }).populate('category')
     if (!foundProduct)
       return res.status(404).json({ error: 'Product not found' })
 
