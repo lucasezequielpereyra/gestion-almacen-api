@@ -193,11 +193,33 @@ const handleLogicalDeleteProduct = async (req: Request, res: Response) => {
   }
 }
 
+const handleActiveProduct = async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  try {
+    const foundProduct = await Product.findOne({ _id: id })
+    if (!foundProduct)
+      return res.status(404).json({ error: 'Product not found' })
+
+    foundProduct.deleted = false
+
+    const logicalActivateProduct = await foundProduct.save()
+
+    return res.status(200).json({
+      message: `El producto ${logicalActivateProduct.name} fue activado`,
+      foundProduct
+    })
+  } catch (error) {
+    return res.status(500).json({ error: error })
+  }
+}
+
 export default {
   handleNewProduct,
   getProductsByOrganization,
   handleUpdateProduct,
   handleDeleteProduct,
   handleLogicalDeleteProduct,
-  getDeletesProductsByOrganization
+  getDeletesProductsByOrganization,
+  handleActiveProduct
 }
