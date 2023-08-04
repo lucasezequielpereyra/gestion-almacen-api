@@ -12,7 +12,7 @@ router.post(
 )
 router.get('/', [verifyEmpleado], producController.getProductsByOrganization)
 router.get(
-  '/deletes',
+  '/inactive',
   [verifyEmpleado],
   producController.getDeletesProductsByOrganization
 )
