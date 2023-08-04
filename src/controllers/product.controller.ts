@@ -197,7 +197,7 @@ const handleActiveProduct = async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const foundProduct = await Product.findOne({ _id: id })
+    const foundProduct = await Product.findOne({ _id: id }).populate('category')
     if (!foundProduct)
       return res.status(404).json({ error: 'Product not found' })
 
