@@ -16,6 +16,7 @@ const handleRefreshToken = async (req: Request, res: Response) => {
   try {
     const foundUser = await User.findOne({ refreshToken })
       .populate('organization')
+      .populate('roles')
       .exec()
 
     // Detected refresh token reuse
