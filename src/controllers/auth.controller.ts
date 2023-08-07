@@ -17,7 +17,7 @@ const handleLogin = async (req: Request, res: Response) => {
   }
 
   try {
-    const foundUser = await User.findOne({ username })
+    const foundUser = await User.findOne({ username }).populate('organization')
     if (!foundUser) return res.sendStatus(401) // 401: Unauthorized
 
     const isMatch = await bcrypt.compare(password, foundUser.password)

@@ -11,12 +11,6 @@ const organizationSchema = new Schema({
       ref: 'User',
       type: Schema.Types.ObjectId
     }
-  ],
-  products: [
-    {
-      ref: 'Product',
-      type: Schema.Types.ObjectId
-    }
   ]
 })
 
