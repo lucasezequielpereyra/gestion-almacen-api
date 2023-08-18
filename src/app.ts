@@ -52,7 +52,6 @@ app.use(verifyAdmin)
 app.use('/admin/organization', organizationRouter)
 app.use('/admin/employee', employeeRouter)
 
-
 /*    ERROR    */
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(500).json('Server error')

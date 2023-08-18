@@ -5,7 +5,6 @@ import User from '../models/user.model'
 import logger from '../config/logger'
 import { Request, Response } from 'express'
 
-
 const handleNewOrganization = async (req: Request, res: Response) => {
   const { name } = req.body
   if (!name) return res.status(400).json({ error: 'Missing name' })
@@ -67,26 +66,36 @@ const getOrganizationByEmployee = async (req: Request, res: Response) => {
   const { username } = req.body
 
   try {
-    const dataUser: IUser | null = await User.findOne({ username: username }).exec()
+    const dataUser: IUser | null = await User.findOne({
+      username: username
+    }).exec()
     if (!dataUser) return res.status(400).json({ error: 'User not found' })
 
-    const dataOrg: IOrganization | null = await Organization.findOne({ employees: dataUser._id }).exec()
-    if (!dataOrg) return res.status(400).json({ error: 'Organization not found' })
+    const dataOrg: IOrganization | null = await Organization.findOne({
+      employees: dataUser._id
+    }).exec()
+    if (!dataOrg)
+      return res.status(400).json({ error: 'Organization not found' })
 
     return res.status(200).json({ organization: dataOrg.name })
   } catch (error) {
     logger.error.error(error)
     res.sendStatus(500)
   }
-
 }
 
 const getOrganizations = async (req: Request, res: Response) => {
   try {
     const foundOrganizations = await Organization.find()
-    if (!foundOrganizations) return res.status(404).json({ message: 'Organizations not found' })
+    if (!foundOrganizations)
+      return res.status(404).json({ message: 'Organizations not found' })
 
-    return res.status(200).json({ message: 'Organizations found', organizations: foundOrganizations })
+    return res
+      .status(200)
+      .json({
+        message: 'Organizations found',
+        organizations: foundOrganizations
+      })
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error })
   }
@@ -97,9 +106,15 @@ const handleDeleteOrganization = async (req: Request, res: Response) => {
 
   try {
     const deletedOrganization = await Organization.findByIdAndDelete(id)
-    if (!deletedOrganization) return res.status(404).json({ message: 'Organization not found' })
+    if (!deletedOrganization)
+      return res.status(404).json({ message: 'Organization not found' })
 
-    return res.status(200).json({ message: 'Organization deleted', organization: deletedOrganization })
+    return res
+      .status(200)
+      .json({
+        message: 'Organization deleted',
+        organization: deletedOrganization
+      })
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error', error })
   }
