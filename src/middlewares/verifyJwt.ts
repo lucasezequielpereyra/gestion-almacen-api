@@ -116,7 +116,7 @@ export const verifyEncargado = (
   }
 }
 
-export const verifyDueño = (
+export const verifyOwner = (
   req: Request,
   res: Response,
   next: NextFunction
