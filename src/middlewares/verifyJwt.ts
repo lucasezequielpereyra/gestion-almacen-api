@@ -139,6 +139,10 @@ export const verifyOwner = (
         role => role.toString() === dueñoRole._id.toString()
       )
       if (!isDueño) return res.sendStatus(403)
+
+      const organization = decoded.UserInfo.organization
+      req.body.organization = organization
+
       next()
     })
   } catch (error) {

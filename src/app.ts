@@ -6,7 +6,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { connect } from './config/mongo'
 import { createRoles } from './libs/initialSetup'
-import { vierifyJwt, verifyAdmin } from './middlewares/verifyJwt'
+import { vierifyJwt, verifyAdmin, verifyOwner } from './middlewares/verifyJwt'
 import { router as registerRouter } from './routes/register.route'
 import { router as authRouter } from './routes/auth.route'
 import { router as refreshTokenRouter } from './routes/refreshToken.route'
@@ -15,6 +15,7 @@ import { router as organizationApiRouter } from './routes/api/organization.route
 import { router as employeeRouter } from './routes/admin/employee.route'
 import { router as categoryRouter } from './routes/api/category.route'
 import { router as productRouter } from './routes/api/product.route'
+import { router as ownerRouter } from './routes/api/owner.route'
 
 const app: Application = express()
 
@@ -46,6 +47,10 @@ app.use('/api/category', [vierifyJwt], categoryRouter)
 
 /*    Organization Product API    */
 app.use('/api/product', [vierifyJwt], productRouter)
+
+/*    Owner API    */
+app.use(verifyOwner)
+app.use('/api/owner', ownerRouter)
 
 /*    Admin    */
 app.use(verifyAdmin)
