@@ -20,6 +20,7 @@ const getOrgazationEmployees = async (req: Request, res: Response) => {
 
     return res.status(200).json(dataEmployees.employees)
   } catch (error) {
+    logger.error.error(error)
     return res.status(500).json({ error: error })
   }
 }
