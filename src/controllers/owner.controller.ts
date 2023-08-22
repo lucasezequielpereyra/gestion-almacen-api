@@ -48,7 +48,8 @@ const handleNewEmployee = async (req: Request, res: Response) => {
       username: username,
       password: password,
       email: email,
-      roles: dataRoles._id
+      roles: dataRoles._id,
+      organization: organization._id
     })
 
     const savedEmployee: IUser = await newEmployee.save()
