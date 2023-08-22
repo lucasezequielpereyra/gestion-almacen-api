@@ -1,4 +1,5 @@
 import User from '../models/user.model'
+import Organization from '../models/organization.model'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
@@ -29,7 +30,9 @@ const handleLogin = async (req: Request, res: Response) => {
     const roles = Object.values(foundUser.roles).filter(Boolean)
 
     // capture organization for response
-    const organization = foundUser.organization || null
+    const organization = await Organization.findById(
+      foundUser.organization
+    ).exec()
 
     // Create JWT Payload
     const accessToken = jwt.sign(
@@ -80,7 +83,15 @@ const handleLogin = async (req: Request, res: Response) => {
     })
 
     // Send auth token
-    res.status(200).json({ accessToken, username, roles, organization })
+    res.status(200).json({
+      accessToken,
+      username,
+      roles,
+      organization: {
+        name: organization?.name,
+        _id: organization?._id
+      }
+    })
   } catch (error) {
     logger.error.error(error)
     res.status(500).json({ message: 'Server Error' })

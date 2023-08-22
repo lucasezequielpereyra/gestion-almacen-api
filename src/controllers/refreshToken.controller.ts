@@ -1,4 +1,5 @@
 import User from '../models/user.model'
+import Organization from '../models/organization.model'
 import jwt from 'jsonwebtoken'
 import logger from '../config/logger'
 import { Request, Response } from 'express'
@@ -60,7 +61,9 @@ const handleRefreshToken = async (req: Request, res: Response) => {
         const roles = Object.values(foundUser.roles)
 
         // capture organization for response
-        const organization = foundUser.organization || null
+        const organization = await Organization.findById(
+          foundUser.organization
+        ).exec()
 
         const accessToken = jwt.sign(
           {
@@ -95,7 +98,15 @@ const handleRefreshToken = async (req: Request, res: Response) => {
 
         const username = foundUser.username
 
-        res.json({ accessToken, username, roles, organization })
+        res.json({
+          accessToken,
+          username,
+          roles,
+          organization: {
+            name: organization?.name,
+            _id: organization?._id
+          }
+        })
       }
     )
   } catch (error) {
