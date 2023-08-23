@@ -13,16 +13,20 @@ const getOrgazationEmployees = async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Missing organization' })
 
   try {
-    const dataEmployees: IOrganization | null = await Organization.findById(
-      organization
-    )
-      .populate('employees')
-      .exec()
+    const dataEmployees: IUser[] | null = await User.find({
+      organization: organization._id
+    }).populate('roles')
 
     if (!dataEmployees)
       return res.status(400).json({ error: 'Organization not found' })
 
-    return res.status(200).json(dataEmployees.employees)
+    // filter out unused fields
+    const employees = dataEmployees.map(employee => {
+      const { _id, username, email, roles } = employee
+      return { _id, username, email, roles }
+    })
+
+    return res.status(200).json(employees)
   } catch (error) {
     logger.error.error(error)
     return res.status(500).json({ error: error })
