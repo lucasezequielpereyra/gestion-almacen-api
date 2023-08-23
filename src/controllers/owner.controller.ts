@@ -21,12 +21,12 @@ const getOrgazationEmployees = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Organization not found' })
 
     // filter out unused fields
-    const employees = dataEmployees.map(employee => {
+    const foundEmployees = dataEmployees.map(employee => {
       const { _id, username, email, roles } = employee
       return { _id, username, email, roles }
     })
 
-    return res.status(200).json(employees)
+    return res.status(200).json({ foundEmployees })
   } catch (error) {
     logger.error.error(error)
     return res.status(500).json({ error: error })
