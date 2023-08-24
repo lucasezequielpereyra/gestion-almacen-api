@@ -20,6 +20,8 @@ const handleRefreshToken = async (req: Request, res: Response) => {
       .populate('roles')
       .exec()
 
+    if (foundUser?.deleted) return res.sendStatus(401) // 401: Unauthorized
+
     // Detected refresh token reuse
     if (foundUser === null) {
       jwt.verify(

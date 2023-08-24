@@ -24,6 +24,8 @@ const handleLogin = async (req: Request, res: Response) => {
       .exec()
     if (!foundUser) return res.sendStatus(401) // 401: Unauthorized
 
+    if (foundUser.deleted) return res.sendStatus(401) // 401: Unauthorized
+
     const isMatch = await bcrypt.compare(password, foundUser.password)
     if (!isMatch) return res.sendStatus(401) // 401: Unauthorized
 

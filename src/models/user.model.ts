@@ -33,6 +33,10 @@ const userSchema = new Schema(
     organization: {
       ref: 'Organization',
       type: Schema.Types.ObjectId
+    },
+    deleted: {
+      type: Boolean,
+      default: false
     }
   },
   {

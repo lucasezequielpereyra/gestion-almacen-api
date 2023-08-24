@@ -10,4 +10,5 @@ export interface IUser {
   organization: ObjectId
   createdAt: Date
   updatedAt: Date
+  deleted: boolean
 }
