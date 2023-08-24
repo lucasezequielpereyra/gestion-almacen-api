@@ -26,7 +26,15 @@ const getOrgazationEmployees = async (req: Request, res: Response) => {
       return { _id, username, email, roles }
     })
 
-    return res.status(200).json({ foundEmployees })
+    // Get available roles
+    const dataRoles: IRole[] | null = await Role.find({}).exec()
+    if (!dataRoles) return res.status(400).json({ error: 'Roles not found' })
+
+    const foundRoles = dataRoles.filter(
+      role => role.name !== 'admin' && role.name !== 'user'
+    )
+
+    return res.status(200).json({ foundEmployees, foundRoles })
   } catch (error) {
     logger.error.error(error)
     return res.status(500).json({ error: error })
