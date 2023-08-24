@@ -53,14 +53,16 @@ const handleNewEmployee = async (req: Request, res: Response) => {
 
   try {
     // get role
-    const dataRoles: IRole | null = await Role.findOne({ name: roles }).exec()
+    const dataRoles: IRole[] | null = await Role.find({
+      name: { $in: roles }
+    }).exec()
     if (!dataRoles) return res.status(400).json({ error: 'Role not found' })
 
     const newEmployee = new User({
       username: username,
       password: password,
       email: email,
-      roles: dataRoles._id,
+      roles: dataRoles.map(role => role._id),
       organization: organization._id
     })
 
@@ -80,7 +82,14 @@ const handleNewEmployee = async (req: Request, res: Response) => {
     if (!updatedOrganization)
       return res.status(400).json({ error: 'Organization not found' })
 
-    return res.status(201).json(`User ${savedEmployee.username} created`)
+    return res.status(201).json({
+      savedEmployee: {
+        _id: savedEmployee._id,
+        username: savedEmployee.username,
+        email: savedEmployee.email,
+        roles: dataRoles
+      }
+    })
   } catch (error) {
     logger.error.error(error)
     return res.status(500).json({ error: error })
