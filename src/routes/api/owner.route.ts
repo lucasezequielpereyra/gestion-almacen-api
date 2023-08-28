@@ -10,3 +10,4 @@ router.post(
   [checkDuplicateUsernameOrEmail],
   ownerController.handleNewEmployee
 )
+router.put('/employees', ownerController.handleUpdateEmployee)

@@ -6,6 +6,7 @@ import Role from '../models/role.model'
 import { IRole } from '../interfaces/role.interface'
 import logger from '../config/logger'
 import { Request, Response } from 'express'
+import bcrypt from 'bcryptjs'
 
 const getOrgazationEmployees = async (req: Request, res: Response) => {
   const { organization } = req.body
@@ -96,7 +97,69 @@ const handleNewEmployee = async (req: Request, res: Response) => {
   }
 }
 
+const handleUpdateEmployee = async (req: Request, res: Response) => {
+  const { organization, employeeId, username, password, email, roles } =
+    req.body
+
+  if (!organization)
+    return res.status(400).json({ error: 'Missing organization' })
+  if (!employeeId) return res.status(400).json({ error: 'Missing employeeId' })
+  if (!username) return res.status(400).json({ error: 'Missing username' })
+  if (!email) return res.status(400).json({ error: 'Missing email' })
+  if (!roles) return res.status(400).json({ error: 'Missing roles' })
+
+  try {
+    const foundEmployee = await User.findOne({ _id: employeeId })
+      .populate('roles')
+      .exec()
+
+    if (!foundEmployee)
+      return res.status(400).json({ error: 'Employee not found' })
+
+    // get role
+    const dataRoles: IRole[] | null = await Role.find({
+      name: { $in: roles }
+    }).exec()
+    if (!dataRoles) return res.status(400).json({ error: 'Role not found' })
+
+    let hashedPass: string | undefined
+    if (password) {
+      hashedPass = await bcrypt.hash(password, 10)
+    }
+
+    const updatedEmployee = await User.findOneAndUpdate(
+      {
+        _id: employeeId
+      },
+      {
+        username: username,
+        password: hashedPass || foundEmployee.password,
+        email: email,
+        roles: dataRoles
+      },
+      { new: true }
+    ).exec()
+
+    if (!updatedEmployee)
+      return res.status(400).json({ error: 'Employee not found' })
+
+    return res.status(201).json({
+      updatedEmployee: {
+        _id: updatedEmployee._id,
+        username: updatedEmployee.username,
+        email: updatedEmployee.email,
+        roles: dataRoles,
+        password: updatedEmployee.password
+      }
+    })
+  } catch (error) {
+    logger.error.error(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
 export default {
   getOrgazationEmployees,
-  handleNewEmployee
+  handleNewEmployee,
+  handleUpdateEmployee
 }
