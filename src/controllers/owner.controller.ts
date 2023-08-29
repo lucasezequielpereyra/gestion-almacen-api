@@ -15,7 +15,8 @@ const getOrgazationEmployees = async (req: Request, res: Response) => {
 
   try {
     const dataEmployees: IUser[] | null = await User.find({
-      organization: organization._id
+      organization: organization._id,
+      deleted: false
     }).populate('roles')
 
     if (!dataEmployees)
@@ -148,7 +149,45 @@ const handleUpdateEmployee = async (req: Request, res: Response) => {
         _id: updatedEmployee._id,
         username: updatedEmployee.username,
         email: updatedEmployee.email,
-        roles: dataRoles,
+        roles: dataRoles
+      }
+    })
+  } catch (error) {
+    logger.error.error(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
+const handleDeleteLogicalEmployee = async (req: Request, res: Response) => {
+  const { employeeId } = req.body
+  console.log(employeeId)
+
+  if (!employeeId) return res.status(400).json({ error: 'Missing employeeId' })
+
+  try {
+    const foundEmployee = await User.findOne({ _id: employeeId }).exec()
+    if (!foundEmployee)
+      return res.status(400).json({ error: 'Employee not found' })
+
+    const updatedEmployee = await User.findOneAndUpdate(
+      {
+        _id: employeeId
+      },
+      {
+        deleted: true
+      },
+      { new: true }
+    ).exec()
+
+    if (!updatedEmployee)
+      return res.status(400).json({ error: 'Employee not found' })
+
+    return res.status(201).json({
+      updatedEmployee: {
+        _id: updatedEmployee._id,
+        username: updatedEmployee.username,
+        email: updatedEmployee.email,
+        roles: updatedEmployee.roles,
         password: updatedEmployee.password
       }
     })
@@ -158,8 +197,39 @@ const handleUpdateEmployee = async (req: Request, res: Response) => {
   }
 }
 
+const getInactiveEmployees = async (req: Request, res: Response) => {
+  const { organization } = req.body
+  if (!organization)
+    return res.status(400).json({ error: 'Missing organization' })
+
+  try {
+    const dataEmployees: IUser[] | null = await User.find({
+      organization: organization._id,
+      deleted: true
+    })
+      .populate('roles')
+      .exec()
+
+    if (!dataEmployees)
+      return res.status(400).json({ error: 'Organization not found' })
+
+    // filter out unused fields
+    const foundEmployees = dataEmployees.map(employee => {
+      const { _id, username, email, roles } = employee
+      return { _id, username, email, roles }
+    })
+
+    return res.status(200).json({ foundEmployees })
+  } catch (error) {
+    logger.error.error(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
 export default {
   getOrgazationEmployees,
   handleNewEmployee,
-  handleUpdateEmployee
+  handleUpdateEmployee,
+  handleDeleteLogicalEmployee,
+  getInactiveEmployees
 }
