@@ -160,7 +160,6 @@ const handleUpdateEmployee = async (req: Request, res: Response) => {
 
 const handleDeleteLogicalEmployee = async (req: Request, res: Response) => {
   const { employeeId } = req.body
-  console.log(employeeId)
 
   if (!employeeId) return res.status(400).json({ error: 'Missing employeeId' })
 
@@ -177,13 +176,15 @@ const handleDeleteLogicalEmployee = async (req: Request, res: Response) => {
         deleted: true
       },
       { new: true }
-    ).exec()
+    )
+      .populate('roles')
+      .exec()
 
     if (!updatedEmployee)
       return res.status(400).json({ error: 'Employee not found' })
 
     return res.status(201).json({
-      updatedEmployee: {
+      deletedEmployee: {
         _id: updatedEmployee._id,
         username: updatedEmployee.username,
         email: updatedEmployee.email,
@@ -226,10 +227,50 @@ const getInactiveEmployees = async (req: Request, res: Response) => {
   }
 }
 
+const handleActiveEmployee = async (req: Request, res: Response) => {
+  const { employeeId } = req.body
+  if (!employeeId) return res.status(400).json({ error: 'Missing employeeId' })
+
+  try {
+    const foundEmployee = await User.findOne({ _id: employeeId }).exec()
+    if (!foundEmployee)
+      return res.status(400).json({ error: 'Employee not found' })
+
+    const updatedEmployee = await User.findOneAndUpdate(
+      {
+        _id: employeeId
+      },
+      {
+        deleted: false
+      },
+      { new: true }
+    )
+      .populate('roles')
+      .exec()
+
+    if (!updatedEmployee)
+      return res.status(400).json({ error: 'Employee not found' })
+
+    return res.status(201).json({
+      activedEmployee: {
+        _id: updatedEmployee._id,
+        username: updatedEmployee.username,
+        email: updatedEmployee.email,
+        roles: updatedEmployee.roles,
+        password: updatedEmployee.password
+      }
+    })
+  } catch (error) {
+    logger.error.error(error)
+    return res.status(500).json({ error: error })
+  }
+}
+
 export default {
   getOrgazationEmployees,
   handleNewEmployee,
   handleUpdateEmployee,
   handleDeleteLogicalEmployee,
-  getInactiveEmployees
+  getInactiveEmployees,
+  handleActiveEmployee
 }

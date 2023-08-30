@@ -12,4 +12,5 @@ router.post(
   ownerController.handleNewEmployee
 )
 router.put('/employees', ownerController.handleUpdateEmployee)
+router.put('/employees/active', ownerController.handleActiveEmployee)
 router.delete('/employees', ownerController.handleDeleteLogicalEmployee)
