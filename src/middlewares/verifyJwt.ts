@@ -5,7 +5,7 @@ import { IRole } from '../interfaces/role.interface'
 
 const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET || 'secret'
 
-export const vierifyJwt = (req: Request, res: Response, next: NextFunction) => {
+export const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
   const authHeader: String | undefined =
     req.header('Authorization') || req.header('authorization')
   if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
