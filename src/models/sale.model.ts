@@ -15,9 +15,14 @@ const saleSchema = new Schema(
     },
     products: [
       {
-        ref: 'Product',
-        type: Schema.Types.ObjectId,
-        required: true
+        product: {
+          ref: 'Product',
+          type: Schema.Types.ObjectId
+        },
+        quantity: {
+          type: Number,
+          required: true
+        }
       }
     ],
     method: {
